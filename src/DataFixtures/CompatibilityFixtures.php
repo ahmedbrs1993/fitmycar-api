@@ -10,10 +10,16 @@ use App\Entity\Model;
 use App\Entity\Product;
 use App\Entity\ProductCompatibility;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class AppFixtures extends Fixture
+class CompatibilityFixtures extends Fixture implements OrderedFixtureInterface
 {
+    public function getOrder(): int
+    {
+        return 3;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $productRepo = $manager->getRepository(Product::class);
