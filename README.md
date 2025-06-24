@@ -30,7 +30,7 @@ composer install
 Create a local environment file:
 
 ```bash
-cp .env.dev .env.local
+cp .env .env.local
 ```
 
 Edit `.env.local` with your own values:
