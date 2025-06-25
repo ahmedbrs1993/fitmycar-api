@@ -7,7 +7,9 @@ use App\Repository\ModelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[UniqueEntity(fields: ['name', 'brand'], message: 'This model already exists.')]
 #[ORM\Entity(repositoryClass: ModelRepository::class)]
 #[ApiResource]
 class Model
@@ -27,7 +29,7 @@ class Model
     /**
      * @var Collection<int, Generation>
      */
-    #[ORM\OneToMany(targetEntity: Generation::class, mappedBy: 'model')]
+    #[ORM\OneToMany(targetEntity: Generation::class, mappedBy: 'model', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $generations;
 
     public function __construct()
@@ -92,5 +94,11 @@ class Model
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        $brandName = $this->getBrand()?->getName() ?? '';
+        return sprintf('%s - %s', $brandName, $this->getName());
     }
 }

@@ -29,7 +29,7 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     private array $specs = [];
 
     #[ORM\Column(length: 255)]
@@ -99,14 +99,32 @@ class Product
         return $this;
     }
 
-    public function getSpecs(): array
+    public function getSpecs(): ?string
     {
         return $this->specs;
     }
 
-    public function setSpecs(array $specs): static
+    public function setSpecs(?string $specs): static
     {
         $this->specs = $specs;
+
+        return $this;
+    }
+
+    public function getSpecsFormatted(): ?string
+    {
+        return implode("\n", $this->specs ?? []);
+    }
+
+    public function setSpecsFormatted(?string $value): static
+    {
+        $normalized = str_replace(["\r\n", "\r"], "\n", $value ?? '');
+        $decoded = html_entity_decode($normalized, ENT_QUOTES | ENT_HTML5);
+        $withLineBreaks = preg_replace('/<(br|div|\/p)[^>]*>/i', "\n", $decoded);
+        $cleaned = strip_tags($withLineBreaks);
+        $lines = array_filter(array_map('trim', explode("\n", $cleaned)));
+
+        $this->specs = $lines;
 
         return $this;
     }

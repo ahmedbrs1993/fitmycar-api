@@ -7,7 +7,9 @@ use App\Repository\GenerationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[UniqueEntity(fields: ['name', 'model'], message: 'This generation already exists for this model.')]
 #[ORM\Entity(repositoryClass: GenerationRepository::class)]
 #[ApiResource]
 class Generation
@@ -27,7 +29,7 @@ class Generation
     /**
      * @var Collection<int, FuelType>
      */
-    #[ORM\OneToMany(targetEntity: FuelType::class, mappedBy: 'generation')]
+    #[ORM\OneToMany(targetEntity: FuelType::class, mappedBy: 'generation', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $fuelTypes;
 
     public function __construct()
@@ -64,6 +66,11 @@ class Generation
         return $this;
     }
 
+    public function getBrandName(): ?string
+    {
+        return $this->model?->getBrand()?->getName();
+    }
+
     /**
      * @return Collection<int, FuelType>
      */
@@ -92,5 +99,12 @@ class Generation
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        $modelName = $this->getModel()?->getName() ?? '';
+        $brandName = $this->getModel()?->getBrand()?->getName() ?? '';
+        return sprintf('%s - %s - %s', $brandName, $modelName, $this->getName());
     }
 }

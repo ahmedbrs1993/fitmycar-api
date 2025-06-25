@@ -7,7 +7,9 @@ use App\Repository\BrandRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[UniqueEntity(fields: ['name'], message: 'This name already exists.')]
 #[ORM\Entity(repositoryClass: BrandRepository::class)]
 #[ApiResource]
 class Brand
@@ -17,13 +19,13 @@ class Brand
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Model>
      */
-    #[ORM\OneToMany(targetEntity: Model::class, mappedBy: 'brand')]
+    #[ORM\OneToMany(targetEntity: Model::class, mappedBy: 'brand', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $models;
 
     public function __construct()
@@ -76,5 +78,10 @@ class Brand
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
     }
 }

@@ -7,7 +7,9 @@ use App\Repository\FuelTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[UniqueEntity(fields: ['generation', 'fuel'], message: 'This fuel is already assigned to this generation.')]
 #[ORM\Entity(repositoryClass: FuelTypeRepository::class)]
 #[ApiResource]
 class FuelType
@@ -63,6 +65,16 @@ class FuelType
         $this->generation = $generation;
 
         return $this;
+    }
+
+    public function getModelName(): ?string
+    {
+        return $this->getGeneration()?->getModel()?->getName();
+    }
+
+    public function getBrandName(): ?string
+    {
+        return $this->getGeneration()?->getModel()?->getBrand()?->getName();
     }
 
     /**
