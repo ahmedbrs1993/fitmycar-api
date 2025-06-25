@@ -5,7 +5,9 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FuelRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[UniqueEntity(fields: ['type'], message: 'This fuel type already exists.')]
 #[ORM\Entity(repositoryClass: FuelRepository::class)]
 #[ApiResource]
 class Fuel

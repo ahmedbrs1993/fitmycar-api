@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\FuelType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -24,6 +26,12 @@ class FuelTypeCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_EDIT, 'Edit Fuel Type')
             ->setEntityLabelInSingular('Fuel Type')
             ->setEntityLabelInPlural('Fuel Types');
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable(Action::EDIT);
     }
 
     public function configureFields(string $pageName): iterable
