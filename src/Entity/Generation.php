@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\GenerationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(fields: ['name', 'model'], message: 'This generation already exists for this model.')]
 #[ORM\Entity(repositoryClass: GenerationRepository::class)]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['model' => 'exact'])]
 class Generation
 {
     #[ORM\Id]

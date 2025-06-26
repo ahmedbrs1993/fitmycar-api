@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ModelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,6 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[UniqueEntity(fields: ['name', 'brand'], message: 'This model already exists.')]
 #[ORM\Entity(repositoryClass: ModelRepository::class)]
+#[ApiFilter(SearchFilter::class, properties: ['brand' => 'exact'])]
 #[ApiResource]
 class Model
 {

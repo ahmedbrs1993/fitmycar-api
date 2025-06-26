@@ -25,7 +25,13 @@ class FuelTypeCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_NEW, 'Create Fuel Type')
             ->setPageTitle(Crud::PAGE_EDIT, 'Edit Fuel Type')
             ->setEntityLabelInSingular('Fuel Type')
-            ->setEntityLabelInPlural('Fuel Types');
+            ->setEntityLabelInPlural('Fuel Types')
+            ->setSearchFields([
+                'name',
+                'generation.name',
+                'generation.model.name',
+                'generation.model.brand.name',
+            ]);
     }
 
     public function configureActions(Actions $actions): Actions

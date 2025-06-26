@@ -7,6 +7,7 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource]
@@ -15,23 +16,30 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['compatibility:read'])]
     private ?int $id = null;
 
+    #[Groups(['compatibility:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(['compatibility:read'])]
     #[ORM\Column(length: 255)]
     private ?string $brand = null;
 
+    #[Groups(['compatibility:read'])]
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    #[Groups(['compatibility:read'])]
     #[ORM\Column]
     private ?float $price = null;
 
+    #[Groups(['compatibility:read'])]
     #[ORM\Column(type: 'json')]
     private array $specs = [];
 
+    #[Groups(['compatibility:read'])]
     #[ORM\Column(length: 255)]
     private ?string $category = null;
 
@@ -99,12 +107,12 @@ class Product
         return $this;
     }
 
-    public function getSpecs(): ?string
+    public function getSpecs(): array
     {
         return $this->specs;
     }
 
-    public function setSpecs(?string $specs): static
+    public function setSpecs(array $specs): static
     {
         $this->specs = $specs;
 
@@ -169,5 +177,10 @@ class Product
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }

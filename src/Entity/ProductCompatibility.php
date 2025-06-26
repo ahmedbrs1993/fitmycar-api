@@ -2,12 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductCompatibilityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductCompatibilityRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['compatibility:read']]
+)]
+#[ApiFilter(SearchFilter::class, properties: ['fuelType' => 'exact'])]
 class ProductCompatibility
 {
     #[ORM\Id]
@@ -17,6 +23,7 @@ class ProductCompatibility
 
     #[ORM\ManyToOne(inversedBy: 'productCompatibilities')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['compatibility:read'])]
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'productCompatibilities')]

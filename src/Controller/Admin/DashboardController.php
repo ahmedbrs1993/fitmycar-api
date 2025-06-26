@@ -8,7 +8,9 @@ use App\Entity\FuelType;
 use App\Entity\Generation;
 use App\Entity\Model;
 use App\Entity\Product;
+use App\Entity\ProductCompatibility;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AsDashboard;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -55,6 +57,11 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('Synchro Diffusion');
     }
 
+    public function configureAssets(): Assets
+    {
+        return Assets::new()->addCssFile('/css/admin.css');
+    }
+
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
@@ -66,5 +73,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Generations', 'fa fa-road', Generation::class);
         yield MenuItem::linkToCrud('Fuel Types', 'fa fa-gas-pump', FuelType::class);
         yield MenuItem::linkToCrud('Fuel', 'fa fa-gas-pump', Fuel::class);
+        yield MenuItem::linkToCrud('Product Compatibility', 'fa fa-adjust', ProductCompatibility::class);
     }
 }

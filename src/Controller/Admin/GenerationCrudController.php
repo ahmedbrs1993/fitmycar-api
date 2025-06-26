@@ -19,7 +19,12 @@ class GenerationCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle(Crud::PAGE_INDEX, 'Generations');
+            ->setPageTitle(Crud::PAGE_INDEX, 'Generations')
+            ->setSearchFields([
+                'name',
+                'model.name',
+                'model.brand.name',
+            ]);
     }
 
     public function configureFields(string $pageName): iterable

@@ -2,16 +2,20 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FuelTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[UniqueEntity(fields: ['generation', 'fuel'], message: 'This fuel is already assigned to this generation.')]
 #[ORM\Entity(repositoryClass: FuelTypeRepository::class)]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['generation' => 'exact'])]
 class FuelType
 {
     #[ORM\Id]
@@ -36,6 +40,12 @@ class FuelType
     public function __construct()
     {
         $this->productCompatibilities = new ArrayCollection();
+    }
+
+    #[Groups(['fuel_type:read'])]
+    public function getFuelName(): ?string
+    {
+        return $this->fuel?->getType();
     }
 
     public function getId(): ?int
@@ -105,5 +115,24 @@ class FuelType
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        $generation = $this->getGeneration();
+        if (!$generation) {
+            return 'Unknown FuelType';
+        }
+
+        $model = $generation->getModel();
+        $brand = $model ? $model->getBrand() : null;
+
+        return sprintf(
+            '%s - %s - %s - %s',
+            $brand?->getName() ?? 'Unknown Brand',
+            $model?->getName() ?? 'Unknown Model',
+            $generation->getName() ?? 'Unknown Generation',
+            $this->getFuel() ?? 'Unknown FuelType'  // assuming FuelType has getName()
+        );
     }
 }

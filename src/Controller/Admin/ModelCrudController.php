@@ -20,7 +20,11 @@ class ModelCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle(Crud::PAGE_INDEX, 'Models');
+            ->setPageTitle(Crud::PAGE_INDEX, 'Models')
+            ->setSearchFields([
+                'name',
+                'brand.name',
+            ]);
     }
 
     public function configureFields(string $pageName): iterable

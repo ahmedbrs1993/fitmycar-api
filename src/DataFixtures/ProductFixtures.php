@@ -142,7 +142,7 @@ class ProductFixtures extends Fixture implements OrderedFixtureInterface
                 $product->setName($item['name']);
                 $product->setBrand($item['brand']);
                 $product->setPrice($item['price']);
-                $product->setImage($item['image']);  // You can prefix image path later in frontend
+                $product->setImage($item['image']); 
                 $product->setSpecs($item['specs']);
                 $product->setCategory($type);
                 $manager->persist($product);
