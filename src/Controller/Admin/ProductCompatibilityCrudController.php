@@ -32,6 +32,13 @@ class ProductCompatibilityCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_NEW, 'Create Product Compatibility')
             ->setPageTitle(Crud::PAGE_EDIT, 'Edit Product Compatibility')
             ->setEntityLabelInSingular('Product Compatibility')
-            ->setEntityLabelInPlural('Product Compatibility');
+            ->setEntityLabelInPlural('Product Compatibility')
+            ->setSearchFields([
+                'product.name',
+                'fuelType.fuel.type',
+                'fuelType.generation.name',
+                'fuelType.generation.model.name',
+                'fuelType.generation.model.brand.name',
+            ]);
     }
 }

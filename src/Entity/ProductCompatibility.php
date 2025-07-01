@@ -28,6 +28,7 @@ class ProductCompatibility
 
     #[ORM\ManyToOne(inversedBy: 'productCompatibilities')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['compatibility:read'])]
     private ?FuelType $fuelType = null;
 
     public function getId(): ?int
@@ -57,5 +58,14 @@ class ProductCompatibility
         $this->fuelType = $fuelType;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s - %s',
+            $this->product?->__toString() ?? 'Product',
+            $this->fuelType?->__toString() ?? 'FuelType'
+        );
     }
 }
