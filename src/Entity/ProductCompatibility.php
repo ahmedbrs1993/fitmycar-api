@@ -28,7 +28,6 @@ class ProductCompatibility
 
     #[ORM\ManyToOne(inversedBy: 'productCompatibilities')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['compatibility:read'])]
     private ?FuelType $fuelType = null;
 
     public function getId(): ?int

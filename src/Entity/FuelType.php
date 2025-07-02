@@ -14,13 +14,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[UniqueEntity(fields: ['generation', 'fuel'], message: 'This fuel is already assigned to this generation.')]
 #[ORM\Entity(repositoryClass: FuelTypeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['fuel_type:simple']]
+)]
 #[ApiFilter(SearchFilter::class, properties: ['generation' => 'exact'])]
 class FuelType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fuel_type:simple'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
@@ -42,7 +45,7 @@ class FuelType
         $this->productCompatibilities = new ArrayCollection();
     }
 
-    #[Groups(['fuel_type:read'])]
+    #[Groups(['fuel_type:simple'])]
     public function getFuelName(): ?string
     {
         return $this->fuel?->getType();

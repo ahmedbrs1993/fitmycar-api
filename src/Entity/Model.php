@@ -10,19 +10,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[UniqueEntity(fields: ['name', 'brand'], message: 'This model already exists.')]
 #[ORM\Entity(repositoryClass: ModelRepository::class)]
 #[ApiFilter(SearchFilter::class, properties: ['brand' => 'exact'])]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['model:simple']],
+)]
 class Model
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['model:simple'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['model:simple'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'models')]
